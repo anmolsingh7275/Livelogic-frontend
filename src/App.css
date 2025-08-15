@@ -1,0 +1,20 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  font-family: "Roboto","sans-serif";
+  background: antiquewhite;
+  color: black;
+}
+.join-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+
+}
