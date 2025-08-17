@@ -9,7 +9,8 @@ const App = () => {
   const [joined ,Setjoined] = useState(false);
   const [roomId, SetRoomId] = useState("");
   const [userName, SetUserName] = useState("");
-  const [language,setLanguage] = useState("javascript");
+  const [language,SetLanguage] = useState("javascript");
+  const [code , SetCode] =  useState("")
   const joinRoom = ()=>{
     if(roomId && userName){
       socket.emit("join",{roomId,userName});
@@ -19,6 +20,9 @@ const App = () => {
 
   const copyRoomId = ()=>{
     
+  }
+  const  handleCodeChange = (newCode)=>{
+     SetCode(newCode);
   }
 
   
@@ -43,17 +47,17 @@ const App = () => {
        </div>
          </div>;
     }
-    return  <div className=" edito-container"> 
+    return  <div className=" editor-container"> 
     <div className="sidebar">
       <div className="room-info">
         <h2>Code Room : {roomId}</h2>
-        <button onClick={copyRoomId}> Copy Id</button>
+        <button onClick={copyRoomId} className="copy-button"> Copy Id</button>
       </div>
       <h3> Users in Room</h3>
       <ul>
-        <li> </li>
-        <li> </li>
-        <li> </li>
+        <li>Rahul </li>
+        <li> Prashant</li>
+        <li> golu </li>
       </ul>
       <p className="typingcl-indicator"> User typing ...</p>
       <select className="langauge-selector">
@@ -67,7 +71,18 @@ const App = () => {
       
       <div className="editor-wrapper">
 
-  <Editor height={"!00%"} defaultLanguage= {language} />
+  <Editor height={"100%"} defaultLanguage= {language}
+  language= {language}
+  value = {code}
+  onChange={handleCodeChange}
+  theme="vs-dark"
+  options={
+    {
+      minimap:{enabled:false},
+      fontSize :14,
+    }
+  }
+  />
       </div>
        </div>;
    
