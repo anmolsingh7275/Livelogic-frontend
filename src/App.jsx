@@ -2,6 +2,7 @@ import { useState } from "react";
 import  "./App.css"
 import io from 'socket.io-client'
 import Editor from '@monaco-editor/react'
+//import { spawn } from "child_process";
 
 const socket = io("http://localhost:5000");
 
@@ -10,17 +11,20 @@ const App = () => {
   const [roomId, SetRoomId] = useState("");
   const [userName, SetUserName] = useState("");
   const [language,SetLanguage] = useState("javascript");
-  const [code , SetCode] =  useState("")
+  const [code , SetCode] =  useState("");
+  const [copySuccess, setCopySuccess] = useState();
   const joinRoom = ()=>{
     if(roomId && userName){
       socket.emit("join",{roomId,userName});
       Setjoined(true);
     }
-  }
+  };
 
-  const copyRoomId = ()=>{
-    
-  }
+  const copyRoomId = () => {
+    navigator.clipboard.writeText(roomId);
+    setCopySuccess("Copied!");
+    setTimeout(() => setCopySuccess(""), 2000);
+  };
   const  handleCodeChange = (newCode)=>{
      SetCode(newCode);
   }
@@ -52,6 +56,7 @@ const App = () => {
       <div className="room-info">
         <h2>Code Room : {roomId}</h2>
         <button onClick={copyRoomId} className="copy-button"> Copy Id</button>
+ {copySuccess && <span className="copy-success">{copySuccess}</span>}
       </div>
       <h3> Users in Room</h3>
       <ul>
@@ -69,20 +74,19 @@ const App = () => {
       <button className="leave-button">Leave Room</button>
     </div>
       
-      <div className="editor-wrapper">
-
-  <Editor height={"100%"} defaultLanguage= {language}
-  language= {language}
-  value = {code}
-  onChange={handleCodeChange}
-  theme="vs-dark"
-  options={
-    {
-      minimap:{enabled:false},
-      fontSize :14,
-    }
-  }
-  />
+  <div className="editor-wrapper">
+        <Editor
+          height={"100%"}
+          defaultLanguage={language}
+          language={language}
+          value={code}
+          onChange={handleCodeChange}
+          theme="vs-dark"
+          options={{
+            minimap: { enabled: false },
+            fontSize: 14,
+          }}
+        />
       </div>
        </div>;
    
