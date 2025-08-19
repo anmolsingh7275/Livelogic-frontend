@@ -88,8 +88,23 @@ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
   }
 h3{
-  margin: ;
+  margin: 1.5rem;
+  margin-bottom: .5rem;
+ font-size: 1 rem;
 }
+ul{
+  list-style: none;
+  li{
+    padding: .5rem;
+    font-size: .9rem;
+    background: gray;
+    margin-top: 5px;
+    border-radius: 5px;
+  }
+}
+
+.typingc-indicator{
   
+}
   }
 }

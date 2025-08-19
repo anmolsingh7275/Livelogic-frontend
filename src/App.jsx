@@ -59,7 +59,7 @@ const App = () => {
         <li> Prashant</li>
         <li> golu </li>
       </ul>
-      <p className="typingcl-indicator"> User typing ...</p>
+      <p className="typingc-indicator"> User typing ...</p>
       <select className="langauge-selector">
         <option value="javascript"> JavaScript</option>
          <option value="python"> Python</option>
