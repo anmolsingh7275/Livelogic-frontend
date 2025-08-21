@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import  "./App.css"
 import io from 'socket.io-client'
 import Editor from '@monaco-editor/react'
@@ -13,6 +13,19 @@ const App = () => {
   const [language,SetLanguage] = useState("javascript");
   const [code , SetCode] =  useState("");
   const [copySuccess, setCopySuccess] = useState();
+  const [users , setUsers] = useState([]);
+
+useEffect( ()=>{
+  socket.on("userJoined" , (users) =>{
+    setUsers(users);
+  });
+
+  return ()=>{
+    socket.off("userJoined");
+  };
+},[]);
+
+
   const joinRoom = ()=>{
     if(roomId && userName){
       socket.emit("join",{roomId,userName});
@@ -27,7 +40,8 @@ const App = () => {
   };
   const  handleCodeChange = (newCode)=>{
      SetCode(newCode);
-  }
+     socket.emit("codeChange" ,{roomId , code : newCode});
+  }; 
 
   
     if(!joined){
@@ -51,7 +65,7 @@ const App = () => {
        </div>
          </div>;
     }
-    return  <div className=" editor-container"> 
+    return  <div className="editor-container"> 
     <div className="sidebar">
       <div className="room-info">
         <h2>Code Room : {roomId}</h2>
@@ -59,13 +73,15 @@ const App = () => {
  {copySuccess && <span className="copy-success">{copySuccess}</span>}
       </div>
       <h3> Users in Room</h3>
-      <ul>
-        <li>Rahul </li>
-        <li> Prashant</li>
-        <li> golu </li>
-      </ul>
+       <ul>
+          {users.map((user, index) => (
+            <li key={index}>{user.slice(0, 8)}...</li>
+          ))}
+        </ul>
       <p className="typingc-indicator"> User typing ...</p>
-      <select className="langauge-selector">
+      <select className="langauge-selector"
+      value={language}
+        onChange = { (e)=> SetLanguage(e.target.value)}>
         <option value="javascript"> JavaScript</option>
          <option value="python"> Python</option>
           <option value="java"> Java</option>
@@ -89,7 +105,7 @@ const App = () => {
         />
       </div>
        </div>;
-   
+ 
   
 }
 
