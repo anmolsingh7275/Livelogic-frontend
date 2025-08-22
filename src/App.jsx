@@ -15,15 +15,29 @@ const App = () => {
   const [copySuccess, setCopySuccess] = useState();
   const [users , setUsers] = useState([]);
 
-useEffect( ()=>{
-  socket.on("userJoined" , (users) =>{
+useEffect(()=>{
+  socket.on("userJoined", (users)=>{
     setUsers(users);
+  });
+  socket.on("codeUpdate", (newCode)=>{
+    SetCode(newCode);
   });
 
   return ()=>{
     socket.off("userJoined");
+    socket.off("codeUpdate");
   };
-},[]);
+}, []);
+
+useEffect(()=>{
+  const handleBeforeUnload = ()=>{
+    socket.emit("leaveRoom");
+  };
+  window.addEventListener("beforeunload",handleBeforeUnload);
+  return ()=>{
+    window.removeEventListener("beforeunload",handleBeforeUnload);
+  }
+}, []);
 
 
   const joinRoom = ()=>{
@@ -38,9 +52,10 @@ useEffect( ()=>{
     setCopySuccess("Copied!");
     setTimeout(() => setCopySuccess(""), 2000);
   };
+
   const  handleCodeChange = (newCode)=>{
      SetCode(newCode);
-     socket.emit("codeChange" ,{roomId , code : newCode});
+     socket.emit("codeChange",{roomId , code : newCode});
   }; 
 
   
@@ -74,7 +89,7 @@ useEffect( ()=>{
       </div>
       <h3> Users in Room</h3>
        <ul>
-          {users.map((user, index) => (
+          {users.map((user, index) =>(
             <li key={index}>{user.slice(0, 8)}...</li>
           ))}
         </ul>
