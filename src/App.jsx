@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import  "./App.css"
 import io from 'socket.io-client'
 import Editor from '@monaco-editor/react'
-//import { spawn } from "child_process";
 
 const socket = io("http://localhost:5000");
 
